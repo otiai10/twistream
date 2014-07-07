@@ -12,7 +12,9 @@ func ExampleTimeline_Listen(t *testing.T) {
 		"ACCESS_TOKEN",
 		"ACCESS_TOKEN_SECRET",
 	)
-
-	status := <-timeline.Listen()
-	fmt.Println(status)
+	// Practically, you would run this loop by goroutine
+	for {
+		status := <-timeline.Listen()
+		fmt.Println(status)
+	}
 }
