@@ -3,7 +3,6 @@ package twistream
 import "net/http"
 import "github.com/mrjones/oauth"
 
-import "fmt"
 import "regexp"
 import "encoding/json"
 

@@ -1,7 +1,7 @@
 package twistream
 
-type Entities struct {
-	Urls         []Url     `json:"urls"`
-	Hashtags     []Hashtag `json:"hashtags"`
-	UserMentions []User    `json:"user_mentions"`
+type entities struct {
+	Urls         []url     `json:"urls"`
+	Hashtags     []hashtag `json:"hashtags"`
+	UserMentions []user    `json:"user_mentions"`
 }

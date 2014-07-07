@@ -1,6 +1,6 @@
 package twistream
 
-type User struct {
+type user struct {
 	Id                             int64  `json:"id"`
 	IdStr                          string `json:"id_str"`
 	Name                           string `json:"name"`

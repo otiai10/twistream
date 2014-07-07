@@ -1,6 +1,6 @@
 package twistream
 
-type Url struct {
+type url struct {
 	Url         string `json:"url"`
 	DisplayUrl  string `json:"display_url"`
 	ExpandedUrl string `json:"expanded_url"`

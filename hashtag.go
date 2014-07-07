@@ -1,6 +1,6 @@
 package twistream
 
-type Hashtag struct {
+type hashtag struct {
 	Text    string `json:"text"`
 	Indices []int  `json:"indices"`
 	// UserMentions []
