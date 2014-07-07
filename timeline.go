@@ -9,6 +9,7 @@ import "encoding/json"
 
 type Timeline struct {
 	response *http.Response
+	stream   chan Status
 }
 
 var provider = oauth.ServiceProvider{
@@ -34,21 +35,22 @@ func New(endpoint, consumerKey, consumerSecret, accessToken, accessTokenSecret s
 		map[string]string{},
 		token,
 	)
-	tl = &Timeline{response}
-	return
-}
-
-// Listen provides channel of Tweet.
-func (tl *Timeline) Listen(fltr ...interface{}) (ch *chan<- Status) {
+	tl = &Timeline{
+		response,
+		make(chan Status),
+	}
 	return
 }
 
 type parser struct {
+	streamProxy chan Status
 }
 
+// TODO: make it not global
 var pool = []byte{}
 var flag = false
 
+// TODO: refactoring
 func (p parser) Write(message []byte) (n int, err error) {
 	if flag {
 		pool = append(pool, message...)
@@ -56,28 +58,31 @@ func (p parser) Write(message []byte) (n int, err error) {
 		status := Status{}
 		if err = json.Unmarshal(pool, &initial); err == nil {
 			if _, ok := initial["friends"]; ok {
-				fmt.Println("これイニシャルだよー. 却下")
+				// Do nothing for initial entry
 			}
 			pool = []byte{}
 		} else if err = json.Unmarshal(pool, &status); err == nil {
-			fmt.Printf("statusでUnmarshal成功!!\n-------------\n%+v\n------------------\n%v\n", status, string(pool))
+			p.streamProxy <- status
 			pool = []byte{}
 		}
 	}
 	flag = false
 	if regexp.MustCompile("^[0-9a-z]+\r\n$").Match(message) {
-		// これはエンティティの一個前
+		// Just before entity
 		flag = true
 	}
 	return
 }
 
-func (tl *Timeline) ReadOnce() string {
-	p := parser{}
-	for {
-		// こっから別
-		e := tl.response.Write(p)
-		fmt.Println("ERROR:", e)
+// Listen provides channel of Tweet.
+func (tl *Timeline) Listen() chan Status {
+	p := parser{
+		tl.stream,
 	}
-	return "hoge"
+	go func() {
+		for {
+			tl.response.Write(p)
+		}
+	}()
+	return tl.stream
 }
