@@ -14,7 +14,7 @@ timeline := twistream.New(
 )
 
 for {
-    tweet := <-timeline
-    fmt.Println(tweet)
+    status := <-timeline.Listen()
+    fmt.Println(status)
 }
 ```
