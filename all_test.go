@@ -9,7 +9,7 @@ import "github.com/robfig/config"
 import "time"
 
 func TestNew(t *testing.T) {
-	c := getConf()
+	c := getConf("TEST")
 	timeline, e := twistream.New(
 		"https://userstream.twitter.com/1.1/user.json",
 		c["consumer_key"],
@@ -30,12 +30,12 @@ func TestNew(t *testing.T) {
 	time.Sleep(120 * time.Second)
 }
 
-func getConf() map[string]string {
+func getConf(section string) map[string]string {
 	conf, _ := config.ReadDefault("test.conf")
-	consumer_key, _ := conf.String("test", "consumer_key")
-	consumer_secret, _ := conf.String("test", "consumer_secret")
-	access_token, _ := conf.String("test", "access_token")
-	access_token_secret, _ := conf.String("test", "access_token_secret")
+	consumer_key, _ := conf.String(section, "consumer_key")
+	consumer_secret, _ := conf.String(section, "consumer_secret")
+	access_token, _ := conf.String(section, "access_token")
+	access_token_secret, _ := conf.String(section, "access_token_secret")
 	return map[string]string{
 		"consumer_key":        consumer_key,
 		"consumer_secret":     consumer_secret,
