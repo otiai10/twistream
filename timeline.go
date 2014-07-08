@@ -1,10 +1,8 @@
 package twistream
 
-import "net/http"
 import "github.com/mrjones/oauth"
-
+import "net/http"
 import "regexp"
-import "encoding/json"
 
 type Timeline struct {
 	response *http.Response
@@ -41,42 +39,13 @@ func New(endpoint, consumerKey, consumerSecret, accessToken, accessTokenSecret s
 	return
 }
 
-type parser struct {
-	streamProxy chan Status
-}
-
-// TODO: make it not global
-var pool = []byte{}
-var flag = false
-
-// TODO: refactoring
-func (p parser) Write(message []byte) (n int, err error) {
-	if flag {
-		pool = append(pool, message...)
-		initial := map[string][]int{}
-		status := Status{}
-		if err = json.Unmarshal(pool, &initial); err == nil {
-			if _, ok := initial["friends"]; ok {
-				// Do nothing for initial entry
-			}
-			pool = []byte{}
-		} else if err = json.Unmarshal(pool, &status); err == nil {
-			p.streamProxy <- status
-			pool = []byte{}
-		}
-	}
-	flag = false
-	if regexp.MustCompile("^[0-9a-z]+\r\n$").Match(message) {
-		// Just before entity
-		flag = true
-	}
-	return
-}
-
-// Listen provides channel of Tweet.
+// Listen bytes sent from Twitter Streaming API
+// and send completed status to the channel.
 func (tl *Timeline) Listen() chan Status {
-	p := parser{
-		tl.stream,
+	// Delegate channel to parser.
+	p := &parser{
+		streamProxy: tl.stream,
+		trigger:     regexp.MustCompile("^[0-9a-z]+\r\n$"),
 	}
 	go func() {
 		for {
