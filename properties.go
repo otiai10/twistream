@@ -1,5 +1,25 @@
+// Definitions of properties in Status
 package twistream
 
+type entities struct {
+	Urls         []url     `json:"urls"`
+	Hashtags     []hashtag `json:"hashtags"`
+	UserMentions []user    `json:"user_mentions"`
+}
+type geo struct {
+	Type        string     `json:"type"`
+	Coordinates [2]float32 `json:"coordinates"`
+}
+type hashtag struct {
+	Text    string `json:"text"`
+	Indices []int  `json:"indices"`
+}
+type url struct {
+	Url         string `json:"url"`
+	DisplayUrl  string `json:"display_url"`
+	ExpandedUrl string `json:"expanded_url"`
+	Indices     []int  `json:"indices"`
+}
 type user struct {
 	Id                             int64  `json:"id"`
 	IdStr                          string `json:"id_str"`
@@ -40,7 +60,3 @@ type user struct {
 	FollowRequestSent              bool   `json:"follow_request_sent"`
 	Notifications                  bool   `json:"notifications"`
 }
-
-/*
-"user":{"id":971441053,"id_str":"971441053","name":"hisyotan","screen_name":"hisyotan","location":"","url":"http:\/\/otiai10.com\/hisyotan\/","description":"hisyotan\u306f\u3057\u3070\u3089\u304f\u65c5\u306b\u51fa\u307e\u3059\u3002\u63a2\u3055\u306a\u3044\u3067\u304f\u3060\u3055\u3044","protected":false,"followers_count":14,"friends_count":2,"listed_count":0,"created_at":"Mon Nov 26 06:24:02 +0000 2012","favourites_count":2,"utc_offset":32400,"time_zone":"Irkutsk","geo_enabled":false,"verified":false,"statuses_count":1935,"lang":"ja","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/378800000178498798\/2a1604598ab1897d0485aae57c278733_normal.png","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/378800000178498798\/2a1604598ab1897d0485aae57c278733_normal.png","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":null,"follow_request_sent":null,"notifications":null}
-*/
