@@ -4,11 +4,11 @@ import "regexp"
 import "encoding/json"
 
 type parser struct {
-	streamProxy chan Status
-	pool        []byte
-	triggered   bool
-	trigger     *regexp.Regexp
-	ready       bool
+	proxy     chan Status
+	pool      []byte
+	triggered bool
+	trigger   *regexp.Regexp
+	ready     bool
 }
 
 // Fulfil io.Writer implementaion.
@@ -18,7 +18,7 @@ func (p *parser) Write(message []byte) (n int, err error) {
 	}
 	p.pool = append(p.pool, message...)
 	if status, ok := p.buildStatus(); ok {
-		p.streamProxy <- status
+		p.proxy <- status
 		return p.reset(n, err)
 	}
 	return

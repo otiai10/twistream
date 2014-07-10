@@ -44,8 +44,8 @@ func New(endpoint, consumerKey, consumerSecret, accessToken, accessTokenSecret s
 func (tl *Timeline) Listen() chan Status {
 	// Delegate channel to parser.
 	p := &parser{
-		streamProxy: tl.stream,
-		trigger:     regexp.MustCompile("^[0-9a-z]+\r\n$"),
+		proxy:   tl.stream,
+		trigger: regexp.MustCompile("^[0-9a-z]+\r\n$"),
 	}
 	go func() {
 		for {
