@@ -27,7 +27,8 @@ func New(endpoint, consumerKey, consumerSecret, accessToken, accessTokenSecret s
 		accessTokenSecret,
 		make(map[string]string),
 	}
-	response, e := consumer.Get(
+	request := dispatchRequestMethod(endpoint, consumer)
+	response, e := request(
 		endpoint,
 		map[string]string{},
 		token,
@@ -53,4 +54,10 @@ func (tl *Timeline) Listen() chan Status {
 		}
 	}()
 	return tl.stream
+}
+
+// dispatchRequestMethod decides method to request.
+// Returns `Get` or `Post`
+func dispatchRequestMethod(endpoint string, consumer *oauth.Consumer) func(string, map[string]string, *oauth.AccessToken) (*http.Response, error) {
+	return consumer.Get
 }

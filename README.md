@@ -18,3 +18,11 @@ for {
     fmt.Println(status)
 }
 ```
+
+# TODOs
+
+- [x] GET user
+- [ ] GET site
+- [ ] GET statuses/sample
+- [ ] GET status/firehose
+- [ ] POST statuses/filter
