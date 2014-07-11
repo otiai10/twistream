@@ -24,7 +24,3 @@ type Status struct {
 	FilterLevel          string   `json:"filter_level"`
 	Lang                 string   `json:"lang"`
 }
-
-/*
-"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"urls":[],"user_mentions":[]},"favorited":false,"retweeted":false,"filter_level":"medium","lang":"ja"}
-*/
