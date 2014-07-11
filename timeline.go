@@ -42,7 +42,7 @@ func New(endpoint, consumerKey, consumerSecret, accessToken, accessTokenSecret s
 
 // Listen bytes sent from Twitter Streaming API
 // and send completed status to the channel.
-func (tl *Timeline) Listen() chan Status {
+func (tl *Timeline) Listen() <-chan Status {
 	// Delegate channel to parser.
 	p := &parser{
 		proxy:   tl.stream,
