@@ -21,7 +21,7 @@ for {
 
 // Tweet to timeline
 status := twistream.Status{
-    Text: "@otiai10 How does Go works?",
+    Text: "@otiai10 How does Go work?",
     InReplyToStatusId: 493324823926288386,
 }
 _ := timeline.Tweet(status)
