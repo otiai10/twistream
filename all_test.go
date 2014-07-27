@@ -36,7 +36,23 @@ func TestNew(t *testing.T) {
 		}
 	}()
 
-	time.Sleep(120 * time.Second)
+	time.Sleep(3 * time.Second)
+}
+
+func TestTimeline_Tweet(t *testing.T) {
+	timeline, _ := twistream.New(
+		"https://userstream.twitter.com/1.1/user.json",
+		CONSUMER_KEY,
+		CONSUMER_SECRET,
+		ACCESS_TOKEN,
+		ACCESS_TOKEN_SECRET,
+	)
+
+	status := twistream.Status{
+		Text: "This is test!!" + time.Now().String(),
+	}
+	e := timeline.Tweet(status)
+	Expect(t, e).ToBe(nil)
 }
 
 func init() {

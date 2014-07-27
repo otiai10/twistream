@@ -24,3 +24,10 @@ type Status struct {
 	FilterLevel          string   `json:"filter_level"`
 	Lang                 string   `json:"lang"`
 }
+
+func (s Status) ToParams() map[string]string {
+	// TODO: embed more information
+	return map[string]string{
+		"status": s.Text,
+	}
+}
