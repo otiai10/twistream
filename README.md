@@ -26,3 +26,5 @@ for {
 - [ ] GET statuses/sample
 - [ ] GET status/firehose
 - [ ] POST statuses/filter
+- [x] POST statuses/update
+- [ ] POST statuses/update_with_media
