@@ -13,10 +13,18 @@ timeline, _ := twistream.New(
     ACCESSTOKENSECRET,
 )
 
+// Listen timeline
 for {
     status := <-timeline.Listen()
     fmt.Println(status)
 }
+
+// Tweet to timeline
+status := twistream.Status{
+    Text: "@otiai10 How does Go works?",
+    InReplyToStatusId: 493324823926288386,
+}
+_ := timeline.Tweet(status)
 ```
 
 # TODOs
