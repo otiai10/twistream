@@ -1,21 +1,30 @@
 package twistream_test
 
-import "testing"
-import . "github.com/otiai10/mint"
-import "github.com/otiai10/twistream"
+// test
+import (
+	"fmt"
+	. "github.com/otiai10/mint"
+	"github.com/otiai10/twistream"
+	"io/ioutil"
+	"strings"
+	"testing"
+	"time"
+)
 
-import "fmt"
-import "github.com/robfig/config"
-import "time"
+var (
+	CONSUMER_KEY        string
+	CONSUMER_SECRET     string
+	ACCESS_TOKEN        string
+	ACCESS_TOKEN_SECRET string
+)
 
 func TestNew(t *testing.T) {
-	c := getConf("TEST")
 	timeline, e := twistream.New(
 		"https://userstream.twitter.com/1.1/user.json",
-		c["consumer_key"],
-		c["consumer_secret"],
-		c["access_token"],
-		c["access_token_secret"],
+		CONSUMER_KEY,
+		CONSUMER_SECRET,
+		ACCESS_TOKEN,
+		ACCESS_TOKEN_SECRET,
 	)
 	Expect(t, e).ToBe(nil)
 	Expect(t, timeline).TypeOf("*twistream.Timeline")
@@ -30,16 +39,14 @@ func TestNew(t *testing.T) {
 	time.Sleep(120 * time.Second)
 }
 
-func getConf(section string) map[string]string {
-	conf, _ := config.ReadDefault("test.conf")
-	consumer_key, _ := conf.String(section, "consumer_key")
-	consumer_secret, _ := conf.String(section, "consumer_secret")
-	access_token, _ := conf.String(section, "access_token")
-	access_token_secret, _ := conf.String(section, "access_token_secret")
-	return map[string]string{
-		"consumer_key":        consumer_key,
-		"consumer_secret":     consumer_secret,
-		"access_token":        access_token,
-		"access_token_secret": access_token_secret,
+func init() {
+	buffer, _ := ioutil.ReadFile("test.conf")
+	lines := strings.Split(string(buffer), "\n")
+	if len(lines) < 4 {
+		panic("test.conf requires at least 4 lines")
 	}
+	CONSUMER_KEY = lines[0]
+	CONSUMER_SECRET = lines[1]
+	ACCESS_TOKEN = lines[2]
+	ACCESS_TOKEN_SECRET = lines[3]
 }

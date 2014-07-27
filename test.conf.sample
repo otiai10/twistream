@@ -1,8 +1,7 @@
+CONSUMERKEY
+CONSUMERSECRET
+ACCESSTOKEN
+ACCESSTOKENSECRET
 # This file is necessary only to run the test.
 # Write consumer key/secret of your application
 # and access token/secret of your account here.
-[TEST]
-consumer_key        : CONSUMERKEY
-consumer_secret     : CONSUMERSECRET
-access_token        : ACCESSTOKEN
-access_token_secret : ACCESSTOKENSECRET
