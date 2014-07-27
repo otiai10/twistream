@@ -32,8 +32,11 @@ func (s Status) ToParams() map[string]string {
 	params := map[string]string{
 		"status": s.Text,
 	}
-	if s.InReplyToStatusId != 0 {
+	switch {
+	case s.InReplyToStatusId != 0:
 		params["in_reply_to_status_id"] = strconv.FormatInt(s.InReplyToStatusId, 10)
+	case s.InReplyToStatusIdStr != "":
+		params["in_reply_to_status_id"] = s.InReplyToStatusIdStr
 	}
 	return params
 }

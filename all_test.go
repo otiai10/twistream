@@ -29,14 +29,20 @@ func TestNew(t *testing.T) {
 	Expect(t, e).ToBe(nil)
 	Expect(t, timeline).TypeOf("*twistream.Timeline")
 
+	var terminate = make(chan bool)
+
 	go func() {
 		for {
 			status := <-timeline.Listen()
 			fmt.Printf("%+v\n", status)
+			terminate <- true
+			break
 		}
 	}()
 
-	time.Sleep(3 * time.Second)
+	if <-terminate {
+		return
+	}
 }
 
 func TestTimeline_Tweet(t *testing.T) {
