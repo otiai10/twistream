@@ -1,5 +1,7 @@
 package twistream
 
+import "strconv"
+
 type Status struct {
 	CreatedAt            string   `json:"created_at"`
 	Id                   int64    `json:"id"`
@@ -27,7 +29,11 @@ type Status struct {
 
 func (s Status) ToParams() map[string]string {
 	// TODO: embed more information
-	return map[string]string{
+	params := map[string]string{
 		"status": s.Text,
 	}
+	if s.InReplyToStatusId != 0 {
+		params["in_reply_to_status_id"] = strconv.FormatInt(s.InReplyToStatusId, 10)
+	}
+	return params
 }

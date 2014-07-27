@@ -49,7 +49,8 @@ func TestTimeline_Tweet(t *testing.T) {
 	)
 
 	status := twistream.Status{
-		Text: "This is test!!" + time.Now().String(),
+		Text:              "This is test!!" + time.Now().String(),
+		InReplyToStatusId: 493324823926288386,
 	}
 	e := timeline.Tweet(status)
 	Expect(t, e).ToBe(nil)
