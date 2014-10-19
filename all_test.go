@@ -2,11 +2,11 @@ package twistream_test
 
 // test
 import (
+	"bufio"
 	"fmt"
 	. "github.com/otiai10/mint"
 	"github.com/otiai10/twistream"
-	"io/ioutil"
-	"strings"
+	"os"
 	"testing"
 	"time"
 )
@@ -29,47 +29,25 @@ func TestNew(t *testing.T) {
 	Expect(t, e).ToBe(nil)
 	Expect(t, timeline).TypeOf("*twistream.Timeline")
 
-	var terminate = make(chan bool)
-
 	go func() {
 		for {
 			status := <-timeline.Listen()
 			fmt.Printf("%+v\n", status)
-			terminate <- true
-			break
 		}
 	}()
-
-	if <-terminate {
-		return
-	}
-}
-
-func TestTimeline_Tweet(t *testing.T) {
-	timeline, _ := twistream.New(
-		"https://userstream.twitter.com/1.1/user.json",
-		CONSUMER_KEY,
-		CONSUMER_SECRET,
-		ACCESS_TOKEN,
-		ACCESS_TOKEN_SECRET,
-	)
-
-	status := twistream.Status{
-		Text:              "This is test!!" + time.Now().String(),
-		InReplyToStatusId: 493324823926288386,
-	}
-	e := timeline.Tweet(status)
-	Expect(t, e).ToBe(nil)
+	time.Sleep(60 * time.Second)
 }
 
 func init() {
-	buffer, _ := ioutil.ReadFile("test.conf")
-	lines := strings.Split(string(buffer), "\n")
-	if len(lines) < 4 {
-		panic("test.conf requires at least 4 lines")
-	}
-	CONSUMER_KEY = lines[0]
-	CONSUMER_SECRET = lines[1]
-	ACCESS_TOKEN = lines[2]
-	ACCESS_TOKEN_SECRET = lines[3]
+	f, _ := os.Open("conf")
+	defer f.Close()
+	s := bufio.NewScanner(f)
+	s.Scan()
+	CONSUMER_KEY = s.Text()
+	s.Scan()
+	CONSUMER_SECRET = s.Text()
+	s.Scan()
+	ACCESS_TOKEN = s.Text()
+	s.Scan()
+	ACCESS_TOKEN_SECRET = s.Text()
 }

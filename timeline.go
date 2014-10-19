@@ -1,7 +1,9 @@
 package twistream
 
+import "log"
 import "net/http"
-import "regexp"
+import "bufio"
+import "encoding/json"
 
 type Timeline struct {
 	response *http.Response
@@ -33,14 +35,18 @@ func New(endpoint, consumerKey, consumerSecret, accessToken, accessTokenSecret s
 // Listen bytes sent from Twitter Streaming API
 // and send completed status to the channel.
 func (tl *Timeline) Listen() <-chan Status {
-	// Delegate channel to parser.
-	p := &parser{
-		proxy:   tl.stream,
-		trigger: regexp.MustCompile("^[0-9a-z]+\r\n$"),
-	}
+	scanner := bufio.NewScanner(tl.response.Body)
 	go func() {
 		for {
-			tl.response.Write(p)
+			if ok := scanner.Scan(); !ok {
+				continue
+			}
+			status := new(Status)
+			if err := json.Unmarshal(scanner.Bytes(), &status); err != nil {
+				log.Println("(abort)")
+				continue
+			}
+			tl.stream <- *status
 		}
 	}()
 	return tl.stream
